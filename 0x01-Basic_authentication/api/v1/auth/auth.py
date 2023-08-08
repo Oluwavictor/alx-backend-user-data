@@ -1,38 +1,42 @@
 #!/usr/bin/env python3
-"""Authentication module for the API.
 """
-import re
-from typing import List, TypeVar
+Auth class
+"""
+
+from tabnanny import check
 from flask import request
+from typing import TypeVar, List
+User = TypeVar('User')
 
 
 class Auth:
-    """Authentication class.
     """
+    a class to manage the API authentication
+    """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Checks if a path requires authentication.
         """
-        if path is not None and excluded_paths is not None:
-            for exclusion_path in map(lambda x: x.strip(), excluded_paths):
-                pattern = ''
-                if exclusion_path[-1] == '*':
-                    pattern = '{}.*'.format(exclusion_path[0:-1])
-                elif exclusion_path[-1] == '/':
-                    pattern = '{}/*'.format(exclusion_path[0:-1])
-                else:
-                    pattern = '{}/*'.format(exclusion_path)
-                if re.match(pattern, path):
-                    return False
+        returns False - path and excluded_paths
+        """
+        check = path
+        if path is None or excluded_paths is None or len(excluded_paths) == 0:
+            return True
+        if path[-1] != "/":
+            check += "/"
+        if check in excluded_paths or path in excluded_paths:
+            return False
         return True
 
     def authorization_header(self, request=None) -> str:
-        """Gets the authorization header field from the request.
         """
-        if request is not None:
-            return request.headers.get('Authorization', None)
-        return None
+        returns None - request
+        """
+        if request is None:
+            return None
+        return request.headers.get("Authorization")
 
-    def current_user(self, request=None) -> TypeVar('User'):
-        """Get current user from the request.
+    def current_user(self, request=None) -> User:
+        """
+        returns None - request
         """
         return None
