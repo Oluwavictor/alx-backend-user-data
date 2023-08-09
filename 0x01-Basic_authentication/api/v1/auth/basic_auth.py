@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Basic authentication module for the API.
+"""Basic authentication module.
 """
 import re
 import base64
@@ -10,13 +10,14 @@ from models.user import User
 
 
 class BasicAuth(Auth):
-    """Basic authentication class.
+    """class BasicAuth.
     """
     def extract_base64_authorization_header(
-            self,
-            authorization_header: str) -> str:
-        """Extracts the Base64 part of the Authorization header
-        for a Basic Authentication.
+            self, authorization_header: str
+    ) -> str:
+        """
+        returns the Base64 part of the Authorization
+         header for a Basic Authentication
         """
         if type(authorization_header) == str:
             pattern = r'Basic (?P<token>.+)'
@@ -26,10 +27,11 @@ class BasicAuth(Auth):
         return None
 
     def decode_base64_authorization_header(
-            self,
-            base64_authorization_header: str,
+            self, base64_authorization_header: str,
             ) -> str:
-        """Decodes a base64-encoded authorization header.
+        """
+        returns the decoded value of a Base64
+        string base64_authorization_header
         """
         if type(base64_authorization_header) == str:
             try:
@@ -45,8 +47,8 @@ class BasicAuth(Auth):
             self,
             decoded_base64_authorization_header: str,
             ) -> Tuple[str, str]:
-        """Extracts user credentials from a base64-decoded authorization
-        header that uses the Basic authentication flow.
+        """
+        returns the user email and password from the Base64 decoded value.
         """
         if type(decoded_base64_authorization_header) == str:
             pattern = r'(?P<user>[^:]+):(?P<password>.+)'
