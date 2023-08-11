@@ -19,6 +19,8 @@ if getenv("AUTH_TYPE", "auth") == "auth":
     auth = Auth()
 elif getenv("AUTH_TYPE", "auth") == "basic_auth":
     auth = BasicAuth()
+elif getenv("AUTH_TYPE") == "session_auth":
+    auth = SessionAuth()
 
 
 @app.errorhandler(404)
@@ -52,13 +54,18 @@ def before_request():
         '/api/v1/status/',
         '/api/v1/unauthorized/',
         '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/',
     ]
 
     if auth and auth.require_auth(request.path, authorized_list):
         auth_header = auth.authorization_header(request)
         user = auth.current_user(request)
+        cookie = auth.session_cookie(request)
         if not auth_header:
             abort(401)
+        if (auth_header and not cookie):
+            abort(401)
+        request.current_user = user
         if not user:
             abort(403)
 
