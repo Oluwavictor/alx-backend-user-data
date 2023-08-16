@@ -9,7 +9,6 @@ import logging
 from typing import List
 import mysql.connector
 
-
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 def filter_datum(
@@ -82,6 +81,7 @@ def main() -> None:
         print(message)
     cursor.close()
     db.close()
+        
 
 if __name__ == '__main__':
     main()
